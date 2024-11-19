@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
     provider.getInfo();
 
     return  MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: provider.name==null? login_screen():task(),
     );
   }

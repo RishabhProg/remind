@@ -40,7 +40,7 @@ class AuthProvider with ChangeNotifier {
       await prefs.setString('ImgUrl', user!.photoURL.toString());
       Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => task()), // Replace with your screen widget
+      MaterialPageRoute(builder: (context) => task()), 
     );
 
       notifyListeners();

@@ -1,14 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:remind/Models/Authenticate.dart';
-import 'package:remind/Models/task_Provider.dart';
-import 'package:remind/UI/task.dart';
+// import 'package:remind/Models/task_Provider.dart';
+// import 'package:remind/UI/task.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 
 class login_screen extends StatefulWidget {
   const login_screen({super.key});
-
   @override
   State<login_screen> createState() => _login_screenState();
 }
@@ -18,15 +19,125 @@ class _login_screenState extends State<login_screen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            await authProvider.signInWithGoogle(context);
-           
-          },
-          child: const Text("Sign in with Google"),
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+           constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          decoration:const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/back.jpg'), 
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children:[
+              const SizedBox(height: 60,),
+             Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+                  'Remind',
+                  style: GoogleFonts.lilitaOne(
+          textStyle: const TextStyle(
+            color: Color.fromARGB(255, 19, 20, 19),
+            letterSpacing: .5,
+            fontSize: 35,
+            fontWeight: FontWeight.w500,
+          ),
+                  ),
+            ),
+            const SizedBox(width: 10),
+            Image.asset(
+                  'assets/bell.png',
+                  height: 35,
+                  width: 35,
+            ),
+          ],
+                  ),
+                  const SizedBox(height: 50,),
+                  
+                  
+          
+           Padding(
+             padding: const EdgeInsets.only(right: 200),
+             child: Text(
+          'Welcome!',
+          style: GoogleFonts.comfortaa(
+            textStyle: const TextStyle(
+              color: Color.fromARGB(255, 19, 20, 19),
+              letterSpacing: .5,
+              fontSize: 35,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+                  ),
+           ),
+                  const SizedBox(height: 10,),
+                  
+                  
+                  
+          
+           Padding(
+             padding: const EdgeInsets.only(right: 15),
+             child: Text(
+                  'Enhance your productivity\nwith Remind and get things\ndone on time.',
+                   style: GoogleFonts.comfortaa(
+                  textStyle: const TextStyle(
+          color: Color.fromARGB(255, 19, 20, 19),
+          letterSpacing: .5,
+          fontSize: 25,
+          fontWeight: FontWeight.w300,
+                  ),
+                   ),
+             ),
+           ),
+            const SizedBox(height: 30,),
+            
+                  
+                   LottieBuilder.asset(
+                  "assets/meditate.json",
+                  repeat: true,
+                  
+                  fit: BoxFit.contain,
+                ),
+                  
+             const SizedBox(height: 30,),
+              Container(
+            height: 50,
+            width: 300, 
+                  
+            
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25), 
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3), 
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(25), 
+              child: SignInButton(
+                Buttons.google,
+                text: "Sign up with Google",
+                onPressed: () async {
+                  await authProvider.signInWithGoogle(context);
+                },
+              ),
+            ),
+          ),
+          
+          ]
+          ),
         ),
       ),
     );
   }
 }
+
+/////////////////////////

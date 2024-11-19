@@ -28,7 +28,7 @@ class _taskState extends State<task> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Task'),
+        title: Text('Tasks'),
       ),
       body: Center(
         child: Column(
@@ -48,7 +48,7 @@ class _taskState extends State<task> {
                         provider2.signOut();
                          Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => login_screen()), // Replace with your screen widget
+      MaterialPageRoute(builder: (context) => login_screen()), 
     );
                        
                       },
