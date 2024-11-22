@@ -15,9 +15,13 @@ class login_screen extends StatefulWidget {
 }
 
 class _login_screenState extends State<login_screen> {
+  
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    double Width = MediaQuery.of(context).size.width;
+    double Height = MediaQuery.of(context).size.height;
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -33,7 +37,7 @@ class _login_screenState extends State<login_screen> {
           ),
           child: Column(
             children:[
-              const SizedBox(height: 60,),
+               SizedBox(height: Height*0.05,),
              Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -68,7 +72,7 @@ class _login_screenState extends State<login_screen> {
             textStyle: const TextStyle(
               color: Color.fromARGB(255, 19, 20, 19),
               letterSpacing: .5,
-              fontSize: 35,
+              fontSize: 30,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -80,20 +84,20 @@ class _login_screenState extends State<login_screen> {
                   
           
            Padding(
-             padding: const EdgeInsets.only(right: 15),
+             padding:  EdgeInsets.only(right:Width*0.01 ,left:Width*0.01  ),
              child: Text(
                   'Enhance your productivity\nwith Remind and get things\ndone on time.',
                    style: GoogleFonts.comfortaa(
-                  textStyle: const TextStyle(
+                  textStyle:  TextStyle(
           color: Color.fromARGB(255, 19, 20, 19),
           letterSpacing: .5,
-          fontSize: 25,
+          fontSize: Width*0.057,
           fontWeight: FontWeight.w300,
                   ),
                    ),
              ),
            ),
-            const SizedBox(height: 30,),
+             SizedBox(height: Height*0.02,),
             
                   
                    LottieBuilder.asset(
