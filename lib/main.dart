@@ -6,12 +6,16 @@ import 'package:remind/Models/task_Provider.dart';
 import 'package:remind/UI/login.dart';
 import 'package:remind/UI/task.dart';
 import 'package:remind/firebase_options.dart';
+import 'package:remind/services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   
-
+tz.initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

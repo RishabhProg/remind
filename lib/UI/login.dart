@@ -107,7 +107,7 @@ class _login_screenState extends State<login_screen> {
                   fit: BoxFit.contain,
                 ),
                   
-             const SizedBox(height: 30,),
+              SizedBox(height: Height*0.06,),
               Container(
             height: 50,
             width: 300, 

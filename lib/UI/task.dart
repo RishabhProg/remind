@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:remind/Models/Authenticate.dart';
 import 'package:remind/Models/task_Provider.dart';
+import 'package:remind/UI/addTask.dart';
 import 'package:remind/UI/login.dart';
 
 class task extends StatefulWidget {
@@ -108,8 +109,10 @@ class _TaskState extends State<task> {
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                
-                  
+                Navigator.push(
+                   context,
+                  MaterialPageRoute(builder: (context) => addTask()), 
+                );
                 },
                 child: const Text(
                   "Add +",
