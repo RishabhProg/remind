@@ -47,14 +47,14 @@ class NotificationService {
   }
 
   Future<void> scheduleNotification({
-    int id = 0,
+    int? id ,
     String? title,
     String? body,
     String? payLoad,
     required DateTime scheduledNotificationDateTime,
   }) async {
     return notificationsPlugin.zonedSchedule(
-      id,
+      id!,
       title,
       body,
       tz.TZDateTime.from(scheduledNotificationDateTime, tz.local),
@@ -62,8 +62,8 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       androidScheduleMode:
-          AndroidScheduleMode.exactAllowWhileIdle, // Use the updated parameter
-      payload: payLoad, // Pass the payload if needed
+          AndroidScheduleMode.exactAllowWhileIdle, 
+      payload: payLoad, 
     );
   }
 

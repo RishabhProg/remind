@@ -48,6 +48,8 @@ dependencies:
   
   timezone: ^0.10.0
   flutter_datetime_picker_plus: ^2.2.0
+  google_generative_ai: ^0.4.6
+  flutter_dotenv: ^5.2.1
   
 
   
@@ -81,6 +83,7 @@ flutter:
     - assets/back.jpg
     - assets/bell.png
     - assets/meditate.json
+    - .env
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

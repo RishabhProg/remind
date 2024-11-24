@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+import 'package:remind/services/gemini.dart';
 import 'package:remind/services/services.dart';
 
 DateTime scheduleTime = DateTime.now();
@@ -14,13 +15,15 @@ class addTask extends StatefulWidget {
 class _AddTaskState extends State<addTask> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  GeminiApi geminiApi = GeminiApi();
 
-  void scheduleNotification() {
+  void scheduleNotification() async{
     String title = titleController.text.trim();
     String description = descriptionController.text.trim();
+    geminiApi.res = "convince me to (${title}) using my about this task which are (${description} in 40 words.)";
+     String generatedText = await geminiApi.geminiTxt();
 
     if (title.isEmpty || description.isEmpty) {
-      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill in both the title and description!'),
@@ -29,12 +32,13 @@ class _AddTaskState extends State<addTask> {
       );
       return;
     }
+    String AImsg = "";
 
-    
     debugPrint('Notification Scheduled for $scheduleTime');
     NotificationService().scheduleNotification(
+      id: 1,
       title: title,
-      body: description,
+      body: generatedText,
       scheduledNotificationDateTime: scheduleTime,
     );
 

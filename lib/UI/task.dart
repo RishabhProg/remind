@@ -5,6 +5,7 @@ import 'package:remind/Models/Authenticate.dart';
 import 'package:remind/Models/task_Provider.dart';
 import 'package:remind/UI/addTask.dart';
 import 'package:remind/UI/login.dart';
+import 'package:remind/services/gemini.dart';
 
 class task extends StatefulWidget {
   const task({super.key});
@@ -14,6 +15,7 @@ class task extends StatefulWidget {
 }
 
 class _TaskState extends State<task> {
+  GeminiApi geminiApi = GeminiApi();
   @override
   void initState() {
     super.initState();
@@ -67,7 +69,6 @@ class _TaskState extends State<task> {
                                 radius: 24,
                               ),
                   ),
-
                   Text(
                     '${provider.name}',
                     style: GoogleFonts.lilitaOne(
@@ -109,10 +110,10 @@ class _TaskState extends State<task> {
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                Navigator.push(
-                   context,
-                  MaterialPageRoute(builder: (context) => addTask()), 
-                );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => addTask()),
+                  );
                 },
                 child: const Text(
                   "Add +",
@@ -129,7 +130,4 @@ class _TaskState extends State<task> {
       ),
     );
   }
-
-  
-
 }
