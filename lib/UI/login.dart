@@ -60,7 +60,7 @@ class _login_screenState extends State<login_screen> {
             ),
           ],
                   ),
-                  const SizedBox(height: 50,),
+                   SizedBox(height: Height*0.07,),
                   
                   
           
@@ -78,7 +78,7 @@ class _login_screenState extends State<login_screen> {
           ),
                   ),
            ),
-                  const SizedBox(height: 10,),
+                   SizedBox(height: Height*0.01,),
                   
                   
                   
@@ -106,14 +106,14 @@ class _login_screenState extends State<login_screen> {
                   
                   fit: BoxFit.contain,
                 ),
-                  
-              SizedBox(height: Height*0.06,),
+                  SizedBox(height: Height*0.03,),
+              
               Container(
-            height: 50,
-            width: 300, 
+                          height: 50,
+                          width: 300, 
                   
-            
-            decoration: BoxDecoration(
+                          
+                          decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25), 
               boxShadow: [
                 BoxShadow(
@@ -123,8 +123,8 @@ class _login_screenState extends State<login_screen> {
                   offset: Offset(0, 3), 
                 ),
               ],
-            ),
-            child: ClipRRect(
+                          ),
+                          child: ClipRRect(
               borderRadius: BorderRadius.circular(25), 
               child: SignInButton(
                 Buttons.google,
@@ -133,8 +133,9 @@ class _login_screenState extends State<login_screen> {
                   await authProvider.signInWithGoogle(context);
                 },
               ),
-            ),
-          ),
+                          ),
+                        ),
+         
           
           ]
           ),

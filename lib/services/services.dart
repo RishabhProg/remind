@@ -28,8 +28,14 @@ class NotificationService {
         android: AndroidNotificationDetails(
           'channelId',
           'channelName',
+
           importance: Importance.max,
           icon: '@drawable/bell',
+          styleInformation: BigTextStyleInformation(
+        '', 
+        contentTitle: null,
+        summaryText: null,
+      ),
         ),
         iOS: DarwinNotificationDetails());
   }
@@ -60,4 +66,9 @@ class NotificationService {
       payload: payLoad, // Pass the payload if needed
     );
   }
+
+Future<void> cancelNotification(int id) async {
+  await notificationsPlugin.cancel(id);
+}
+
 }
