@@ -7,6 +7,8 @@ import 'package:remind/Models/tasklist_Provider.dart';
 import 'package:remind/UI/addTask.dart';
 import 'package:remind/UI/login.dart';
 import 'package:remind/services/services.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 //import 'package:remind/services/gemini.dart';
 
 class task extends StatefulWidget {
@@ -19,9 +21,27 @@ class task extends StatefulWidget {
 class _TaskState extends State<task> {
   // GeminiApi geminiApi = GeminiApi();
   NotificationService notificationService = NotificationService();
+
+  
+
+void requestNotificationPermission() async {
+  if (await Permission.notification.isDenied) {
+   
+    final status = await Permission.notification.request();
+
+    if (status.isGranted) {
+      print("Notification permission granted");
+    } else {
+      print("Notification permission denied");
+    }
+  }
+}
+
   @override
   void initState() {
     super.initState();
+      requestNotificationPermission();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<taskProvider>(context, listen: false).getInfo();
     });

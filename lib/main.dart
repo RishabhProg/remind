@@ -11,7 +11,7 @@ import 'package:remind/services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-void main() async {
+void main() async { 
   
 tz.initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();

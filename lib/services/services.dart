@@ -8,7 +8,7 @@ class NotificationService {
 
   Future<void> initNotification() async {
     AndroidInitializationSettings initializationSettingsAndroid =
-        const AndroidInitializationSettings('@drawable/bell');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
 
     var initializationSettingsIOS = const DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -30,7 +30,7 @@ class NotificationService {
           'channelName',
 
           importance: Importance.max,
-          icon: '@drawable/bell',
+          icon: '@mipmap/ic_launcher',
           styleInformation: BigTextStyleInformation(
         '', 
         contentTitle: null,
@@ -73,5 +73,13 @@ Future<void> cancelNotification(int id) async {
 Future<void> cancelAllNotifications() async {
   await notificationsPlugin.cancelAll();
 }
+
+
+
+
+
+
+
+
 
 }

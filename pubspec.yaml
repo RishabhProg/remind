@@ -50,6 +50,7 @@ dependencies:
   flutter_datetime_picker_plus: ^2.2.0
   google_generative_ai: ^0.4.6
   flutter_dotenv: ^5.2.1
+  permission_handler: ^11.3.1
   
 
   
