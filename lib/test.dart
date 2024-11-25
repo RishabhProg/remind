@@ -1,9 +1,12 @@
-// import 'package:flutter/foundation.dart';
 // import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
-
 // import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+// import 'package:lottie/lottie.dart';
+// import 'package:provider/provider.dart';
+// import 'package:remind/Models/tasklist_Provider.dart';
+// import 'package:remind/services/gemini.dart';
 // import 'package:remind/services/services.dart';
+// import 'package:remind/services/taskList.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 // DateTime scheduleTime = DateTime.now();
 
@@ -11,271 +14,85 @@
 //   const addTask({super.key});
 
 //   @override
-//   State<addTask> createState() => _addTaskState();
+//   State<addTask> createState() => _AddTaskState();
 // }
 
-// class _addTaskState extends State<addTask> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return  Scaffold(
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-
-            
-            
-            
-//            TextButton(
-//       onPressed: () {
-//         DatePicker.showDateTimePicker(
-//           context,
-//           showTitleActions: true,
-//           onChanged: (date) => scheduleTime = date,
-//           onConfirm: (date) {},
-//         );
-//       },
-//       child: const Text(
-//         'Select Date Time',
-//         style: TextStyle(color: Colors.blue),
-//       ),
-//     ), 
-//    const SizedBox(height: 20,),
-           
-//            ElevatedButton(
-//       child: const Text('Schedule notifications'),
-//       onPressed: () {
-//         debugPrint('Notification Scheduled for $scheduleTime');
-//         NotificationService().scheduleNotification(
-//             title: 'Scheduled Notification',
-//             body: '$scheduleTime',
-//             scheduledNotificationDateTime: scheduleTime);
-//       },
-//     )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// import 'package:flutter/material.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'dart:convert'; // For encoding and decoding JSON data
-// class Task {
-//   final String title;
-//   final String description;
-//   final String time;
-
-//   Task({required this.title, required this.description, required this.time});
-
-//   // Convert Task to Map for SharedPreferences
-//   Map<String, String> toMap() {
-//     return {'title': title, 'description': description, 'time': time};
-//   }
-
-//   // Create Task from Map
-//   static Task fromMap(Map<String, dynamic> map) {
-//     return Task(
-//       title: map['title'],
-//       description: map['description'],
-//       time: map['time'],
-//     );
-//   }
-// }
-
-// class TaskManager extends StatefulWidget {
-//   const TaskManager({super.key});
-
-//   @override
-//   State<TaskManager> createState() => _TaskManagerState();
-// }
-
-// class _TaskManagerState extends State<TaskManager> {
+// class _AddTaskState extends State<addTask> {
 //   final TextEditingController titleController = TextEditingController();
 //   final TextEditingController descriptionController = TextEditingController();
-//   List<Task> tasks = [];
+//   String? Listtitle;
+//   String? Listdate;
+//   int? Listid;
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadTasks();
-//   }
+//   GeminiApi geminiApi = GeminiApi();
 
-//   // Load tasks from SharedPreferences
-//   Future<void> _loadTasks() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     final String? tasksString = prefs.getString('tasks');
-//     if (tasksString != null) {
-//       final List<dynamic> taskList = jsonDecode(tasksString);
-//       tasks = taskList.map((taskMap) => Task.fromMap(taskMap)).toList();
-//     }
-//     setState(() {});
-//   }
+//   void scheduleNotification() async {
+//     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-//   // Save tasks to SharedPreferences
-//   Future<void> _saveTasks() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     final List<Map<String, String>> taskList = tasks.map((task) => task.toMap()).toList();
-//     await prefs.setString('tasks', jsonEncode(taskList));
-//   }
+    
+//     int id = sharedPreferences.getInt('notification_id') ?? 0;
+//     String title = titleController.text.trim();
+//     String description = descriptionController.text.trim();
+//     Listtitle = title;
+//     Listdate = scheduleTime.toString();
+//     geminiApi.res =
+//         "convince me to (${title}) using my about this task which are (${description} in 40 words.)";
+//     String generatedText = await geminiApi.geminiTxt();
 
-//   // Add a new task
-//   void _addTask() {
-//     if (titleController.text.trim().isEmpty ||
-//         descriptionController.text.trim().isEmpty) {
+//     if (title.isEmpty || description.isEmpty) {
 //       ScaffoldMessenger.of(context).showSnackBar(
 //         const SnackBar(
-//           content: Text('Please fill in both fields!'),
+//           content: Text('Please fill in both the title and description!'),
 //           duration: Duration(seconds: 2),
 //         ),
 //       );
 //       return;
 //     }
-
-//     final newTask = Task(
-//       title: titleController.text.trim(),
-//       description: descriptionController.text.trim(),
-//       time: DateTime.now().toString(),
+//    // Listid = id;
+//     print(id);
+//     debugPrint('Notification Scheduled for $scheduleTime');
+//     NotificationService().scheduleNotification(
+//       id: id,
+//       title: title,
+//       body: generatedText,
+//       scheduledNotificationDateTime: scheduleTime,
 //     );
-//     setState(() {
-//       tasks.add(newTask);
-//     });
-//     _saveTasks();
-//     titleController.clear();
-//     descriptionController.clear();
-//   }
+//     id++;
+//     await sharedPreferences.setInt('notification_id', id);
 
-//   // Delete a task
-//   void _deleteTask(int index) {
-//     setState(() {
-//       tasks.removeAt(index);
-//     });
-//     _saveTasks();
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(
+//         content: Text('Notification Scheduled Successfully!'),
+//         duration: Duration(seconds: 2),
+//       ),
+//     );
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
+//     final taskProvider = Provider.of<TasklistProvider>(context);
 //     return Scaffold(
 //       appBar: AppBar(
-//         title: const Text('Task Manager'),
+//         title: const Text('Add Task'),
 //       ),
-//       body: Column(
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
+//       body: Center(
+//         child: Padding(
+//           padding: const EdgeInsets.all(16.0),
+//           child: SingleChildScrollView(
 //             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
 //               children: [
-//                 TextField(
-//                   controller: titleController,
-//                   decoration: const InputDecoration(
-//                     labelText: 'Task Title',
-//                     border: OutlineInputBorder(),
-//                   ),
-//                 ),
-//                 const SizedBox(height: 10),
-//                 TextField(
-//                   controller: descriptionController,
-//                   decoration: const InputDecoration(
-//                     labelText: 'Task Description',
-//                     border: OutlineInputBorder(),
-//                   ),
-//                   maxLines: 2,
-//                 ),
-//                 const SizedBox(height: 10),
-//                 ElevatedButton(
-//                   onPressed: _addTask,
-//                   child: const Text('Add Task'),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Expanded(
-//             child: tasks.isEmpty
-//                 ? const Center(
-//                     child: Text(
-//                       'No tasks yet. Add a task!',
-//                       style: TextStyle(fontSize: 16),
+//                  SizedBox(
+//                   height: 200,
+//                   width: 200,
+//                    child: LottieBuilder.asset(
+//                       "assets/watch.json",
+//                       repeat: true,
+                      
+//                       fit: BoxFit.contain,
 //                     ),
-//                   )
-//                 : ListView.builder(
-//                     itemCount: tasks.length,
-//                     itemBuilder: (context, index) {
-//                       final task = tasks[index];
-//                       return Padding(
-//                         padding: const EdgeInsets.symmetric(
-//                             horizontal: 16.0, vertical: 8.0),
-//                         child: Container(
-//                           decoration: BoxDecoration(
-//                             color: Colors.grey[200],
-//                             borderRadius: BorderRadius.circular(10),
-//                             boxShadow: [
-//                               BoxShadow(
-//                                 color: Colors.black.withOpacity(0.1),
-//                                 blurRadius: 4,
-//                                 offset: const Offset(0, 2),
-//                               ),
-//                             ],
-//                           ),
-//                           child: ListTile(
-//                             title: Text(task.title),
-//                             subtitle: Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Text(task.description),
-//                                 Text(
-//                                   'Time: ${task.time}',
-//                                   style: const TextStyle(
-//                                     fontSize: 12,
-//                                     color: Colors.grey,
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                             trailing: IconButton(
-//                               icon: const Icon(Icons.delete, color: Colors.red),
-//                               onPressed: () => _deleteTask(index),
-//                             ),
-//                           ),
-//                         ),
-//                       );
-//                     },
-//                   ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-
-
-// ///////////////////////////////////////////////////////////////////////
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'task_provider.dart';
-// import 'task_model.dart';
-
-// class TaskManager extends StatelessWidget {
-//   final TextEditingController titleController = TextEditingController();
-//   final TextEditingController descriptionController = TextEditingController();
-
-//   TaskManager({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final taskProvider = Provider.of<TaskProvider>(context);
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Task Manager'),
-//       ),
-//       body: Column(
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: Column(
-//               children: [
+//                  ),
+//                  const SizedBox(height: 30,),
 //                 TextField(
 //                   controller: titleController,
 //                   decoration: const InputDecoration(
@@ -283,97 +100,53 @@
 //                     border: OutlineInputBorder(),
 //                   ),
 //                 ),
-//                 const SizedBox(height: 10),
+//                 const SizedBox(height: 20),
 //                 TextField(
 //                   controller: descriptionController,
 //                   decoration: const InputDecoration(
 //                     labelText: 'Task Description',
 //                     border: OutlineInputBorder(),
 //                   ),
-//                   maxLines: 2,
+//                   maxLines: 3,
 //                 ),
-//                 const SizedBox(height: 10),
-//                 ElevatedButton(
+//                 const SizedBox(height: 20),
+//                 TextButton(
 //                   onPressed: () {
-//                     if (titleController.text.trim().isEmpty ||
-//                         descriptionController.text.trim().isEmpty) {
-//                       ScaffoldMessenger.of(context).showSnackBar(
-//                         const SnackBar(
-//                           content: Text('Please fill in both fields!'),
-//                           duration: Duration(seconds: 2),
-//                         ),
-//                       );
-//                       return;
-//                     }
-
-//                     final newTask = Task(
-//                       title: titleController.text.trim(),
-//                       description: descriptionController.text.trim(),
-//                       time: DateTime.now().toString(),
+//                     DatePicker.showDateTimePicker(
+//                       context,
+//                       showTitleActions: true,
+//                       onChanged: (date) => scheduleTime = date,
+//                       onConfirm: (date) => {},
 //                     );
-//                     taskProvider.addTask(newTask);
-
-//                     titleController.clear();
-//                     descriptionController.clear();
 //                   },
-//                   child: const Text('Add Task'),
+//                   child: const Text(
+//                     'Select Date Time',
+//                     style: TextStyle(color: Colors.blue),
+//                   ),
+//                 ),
+//                 const SizedBox(height: 20),
+//                 ElevatedButton(
+//                   onPressed: () async{
+//                     scheduleNotification();
+            
+//                 SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+            
+               
+//                 Listid = sharedPreferences.getInt('notification_id') ?? 0;
+//                     final newTask = Task(
+//                       title:titleController.text.trim(),
+//                       listid: Listid!,
+//                       time: scheduleTime.toString(),
+//                     );
+//                      taskProvider.addTask(newTask);
+                    
+//                   },
+//                   child: const Text('Schedule Notifications'),
 //                 ),
 //               ],
 //             ),
 //           ),
-//           Expanded(
-//             child: taskProvider.tasks.isEmpty
-//                 ? const Center(
-//                     child: Text(
-//                       'No tasks yet. Add a task!',
-//                       style: TextStyle(fontSize: 16),
-//                     ),
-//                   )
-//                 : ListView.builder(
-//                     itemCount: taskProvider.tasks.length,
-//                     itemBuilder: (context, index) {
-//                       final task = taskProvider.tasks[index];
-//                       return Padding(
-//                         padding: const EdgeInsets.symmetric(
-//                             horizontal: 16.0, vertical: 8.0),
-//                         child: Container(
-//                           decoration: BoxDecoration(
-//                             color: Colors.grey[200],
-//                             borderRadius: BorderRadius.circular(10),
-//                             boxShadow: [
-//                               BoxShadow(
-//                                 color: Colors.black.withOpacity(0.1),
-//                                 blurRadius: 4,
-//                                 offset: const Offset(0, 2),
-//                               ),
-//                             ],
-//                           ),
-//                           child: ListTile(
-//                             title: Text(task.title),
-//                             subtitle: Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Text(task.description),
-//                                 Text(
-//                                   'Time: ${task.time}',
-//                                   style: const TextStyle(
-//                                     fontSize: 12,
-//                                     color: Colors.grey,
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                             trailing: IconButton(
-//                               icon: const Icon(Icons.delete, color: Colors.red),
-//                               onPressed: () => taskProvider.deleteTask(index),
-//                             ),
-//                           ),
-//                         ),
-//                       );
-//                     },
-//                   ),
-//           ),
-//         ],
+//         ),
 //       ),
 //     );
 //   }

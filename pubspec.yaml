@@ -83,6 +83,7 @@ flutter:
     - assets/back.jpg
     - assets/bell.png
     - assets/meditate.json
+    - assets/watch.json
     - .env
     
 

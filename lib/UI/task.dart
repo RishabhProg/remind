@@ -122,15 +122,19 @@ class _TaskState extends State<task> {
                   child: Container(
                     padding: const EdgeInsets.all(12.0),
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: const Color.fromARGB(255, 254, 252, 254),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 4,
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
                       ],
+                      border: Border.all(
+                           color: Colors.blue, 
+                            width: 2.0,       
+                            ),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,20 +147,28 @@ class _TaskState extends State<task> {
                               
                               Text(
                                 task.title,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: GoogleFonts.aBeeZee(
+                      textStyle: const TextStyle(
+                        color: Color.fromARGB(255, 19, 20, 19),
+                        letterSpacing: .5,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                               ),
                               const SizedBox(height: 8),
 
                              
                               Text(
                                 task.time,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
+                                style:  GoogleFonts.aBeeZee(
+                      textStyle: const TextStyle(
+                        color: Color.fromARGB(255, 19, 20, 19),
+                        letterSpacing: .5,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                               ),
                             ],
                           ),
