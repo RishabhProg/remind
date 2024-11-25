@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+import 'package:provider/provider.dart';
+import 'package:remind/Models/tasklist_Provider.dart';
 import 'package:remind/services/gemini.dart';
 import 'package:remind/services/services.dart';
+import 'package:remind/services/taskList.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 DateTime scheduleTime = DateTime.now();
 
@@ -15,13 +19,24 @@ class addTask extends StatefulWidget {
 class _AddTaskState extends State<addTask> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  String? Listtitle;
+  String? Listdate;
+  int? Listid;
+
   GeminiApi geminiApi = GeminiApi();
 
-  void scheduleNotification() async{
+  void scheduleNotification() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    
+    int id = sharedPreferences.getInt('notification_id') ?? 0;
     String title = titleController.text.trim();
     String description = descriptionController.text.trim();
-    geminiApi.res = "convince me to (${title}) using my about this task which are (${description} in 40 words.)";
-     String generatedText = await geminiApi.geminiTxt();
+    Listtitle = title;
+    Listdate = scheduleTime.toString();
+    geminiApi.res =
+        "convince me to (${title}) using my about this task which are (${description} in 40 words.)";
+    String generatedText = await geminiApi.geminiTxt();
 
     if (title.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -32,15 +47,17 @@ class _AddTaskState extends State<addTask> {
       );
       return;
     }
-    String AImsg = "";
-
+   // Listid = id;
+    print(id);
     debugPrint('Notification Scheduled for $scheduleTime');
     NotificationService().scheduleNotification(
-      id: 1,
+      id: id,
       title: title,
       body: generatedText,
       scheduledNotificationDateTime: scheduleTime,
     );
+    id++;
+    await sharedPreferences.setInt('notification_id', id);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -52,6 +69,7 @@ class _AddTaskState extends State<addTask> {
 
   @override
   Widget build(BuildContext context) {
+    final taskProvider = Provider.of<TasklistProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Task'),
@@ -95,7 +113,21 @@ class _AddTaskState extends State<addTask> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: scheduleNotification,
+                onPressed: () async{
+                  scheduleNotification();
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+   
+    Listid = sharedPreferences.getInt('notification_id') ?? 0;
+                  final newTask = Task(
+                    title:titleController.text.trim(),
+                    listid: Listid!,
+                    time: scheduleTime.toString(),
+                  );
+                   taskProvider.addTask(newTask);
+                  
+                },
                 child: const Text('Schedule Notifications'),
               ),
             ],

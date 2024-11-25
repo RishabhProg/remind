@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:remind/Models/Authenticate.dart';
 import 'package:remind/Models/task_Provider.dart';
+import 'package:remind/Models/tasklist_Provider.dart';
 import 'package:remind/UI/login.dart';
 import 'package:remind/UI/task.dart';
 import 'package:remind/firebase_options.dart';
@@ -25,6 +26,7 @@ tz.initializeTimeZones();
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => taskProvider()),
+        ChangeNotifierProvider(create: (context) => TasklistProvider()),
       ],
       child: MyApp(),
     ),
